@@ -12,9 +12,6 @@
 					<li><a href="#"> <i class="fas fa-table"></i> <span
 							class="bot-line"></span>账单管理
 					</a></li>
-					<li><a href="#"> <i class="far fa-check-square"></i> <span
-							class="bot-line"></span>员工审核
-					</a></li>
 					<li class="has-sub"><a href="#"> <i
 							class="zmdi zmdi-settings"></i>系统管理 <span class="bot-line"></span>
 					</a>
@@ -25,16 +22,30 @@
 				</ul>
 			</div>
 			<div class="header__tool">
-				<div class="account-wrap">
-					<div
-						class="account-item account-item--style2 clearfix js-item-menu">
-						<div class="image">
-							<img src="${request.contextPath}/statics/images/icon/avatar-01.jpg" alt="John Doe" />
-						</div>
-					</div>
-				</div>
-			</div>
+                <div class="account-wrap">
+                    <div class="account-item account-item--style2 clearfix js-item-menu">
+                         <div class="content">
+                             <a class="js-acc-btn" href="#">${currentUser.userName!""}</a>
+                         </div>
+                         <div class="account-dropdown js-dropdown">
+                             <div class="account-dropdown__body">
+                                 <div class="account-dropdown__item">
+                                     <a href="#">
+                                         <i class="zmdi zmdi-account"></i>修改密码</a>
+                                 </div>
+                             </div>
+                             <div class="account-dropdown__footer">
+                                 <a href="#" onclick="$(location).attr('href', 'logout');">
+                                     <i class="zmdi zmdi-power"></i>退出系统</a>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
 		</div>
 	</div>
 </header>
 <!-- END HEADER DESKTOP-->
+<script>
+
+</script>

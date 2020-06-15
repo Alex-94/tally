@@ -39,6 +39,12 @@
 	<!-- scripts -->
 	<script src="${request.contextPath}/statics/js/vendor/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript">
+		document.onkeydown = function (event) {
+	        var e = event || window.event;
+	        if (e && e.keyCode == 13) {
+	            $(".login-button").click();
+	        }
+	    }; 
 		function hasClass(elem, cls) {
 			cls = cls || '';
 			if (cls.replace(/\s/g, '').length == 0)
@@ -88,8 +94,8 @@
 				},
 				dataType : 'JSON',
 				success: function (result) {
-					if (result == 0) {
-						alert("登录成功");
+					if (result.code == 1) {
+						location.replace('user.html');
 					}else {
 						setTimeout(function() {
 							removeClass(document.querySelector(".login"), "active")

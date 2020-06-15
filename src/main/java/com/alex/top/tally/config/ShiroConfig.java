@@ -50,13 +50,12 @@ public class ShiroConfig {
 		shiroFilter.setUnauthorizedUrl("/");
 
 		Map<String, String> filterMap = new LinkedHashMap<>();
-		filterMap.put("/**", "anon");
 		filterMap.put("/statics/**", "anon");
 		filterMap.put("/login.html", "anon");
 		filterMap.put("/sys/login", "anon");
 		filterMap.put("/favicon.ico", "anon");
 		filterMap.put("/captcha.jpg", "anon");
-//		filterMap.put("/**", "authc");
+		filterMap.put("/**", "authc");
 		shiroFilter.setFilterChainDefinitionMap(filterMap);
 
 		return shiroFilter;
