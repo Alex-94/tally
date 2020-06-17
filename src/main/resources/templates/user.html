@@ -54,7 +54,7 @@
 		                                            <td>
 		                                                <div class="table-data-feature">
 		                                                		<#if user.userState == 1>
-			                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="重置密码">
+			                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="重置密码" onclick="resetPwd('${user.id}')">
 			                                                        <i class="fa fa-rotate-right"></i>
 			                                                    </button>
 		                                                		</#if>

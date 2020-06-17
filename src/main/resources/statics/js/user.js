@@ -1,21 +1,3 @@
-function getUserList() {
-	$.ajax({
-		url : "/addUser",
-		type : 'POST',
-		data : {
-			userName : userName,
-			password : password,
-			userType : userType
-		},
-		dataType : 'JSON',
-		success : function(result) {
-			if (result.code == 1) {
-				$('#addOrUpdateUserModal').modal('hide');
-				$('.modal-backdrop').remove();
-			}
-		}
-	});
-}
 function submitUser() {
 	let userName = $("#userForm input[name='userName']").val();
 	if (userName == '') { alert("请输入用户名!"); return false; }
@@ -98,4 +80,23 @@ function submitCheckUser() {
 			}
 		}
 	});
+}
+function resetPwd(userId) {
+	if (confirm("确定要重置密码吗?") == true){ 
+		$.ajax({
+			url : "/resetPwd",
+			type : 'POST',
+			data : {
+				userId : userId,
+			},
+			dataType : 'JSON',
+			success : function(result) {
+				if (result.code == 1) {
+					alert("修改成功, 初始密码为【666666】！");
+				}else {
+					alert(result.msg);
+				}
+			}
+		});
+	}
 }

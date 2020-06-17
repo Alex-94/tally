@@ -29,8 +29,8 @@
                          </div>
                          <div class="account-dropdown js-dropdown">
                              <div class="account-dropdown__body">
-                                 <div class="account-dropdown__item">
-                                     <a href="#">
+                                 <div class="account-dropdown__item" onclick="updatePwd()">
+                                     <a href="javascript:void(0)">
                                          <i class="zmdi zmdi-account"></i>修改密码</a>
                                  </div>
                              </div>
@@ -46,6 +46,78 @@
 	</div>
 </header>
 <!-- END HEADER DESKTOP-->
+<div class="modal fade" id="updatePwdModal" tabindex="-1" role="dialog" aria-labelledby="updatePwdModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="updatePwdModalLabel">修改密码</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				 <div class="card">
+                     <div class="card-body card-block">
+                         <form id="updatePwdForm" method="post" class="form-horizontal">
+                             <div class="row form-group">
+                                 <div class="col col-md-3">
+                                     <label for="text-input" class="form-control-label">原密码</label>
+                                 </div>
+                                 <div class="col-12 col-md-9">
+                                     <input type="password" name="oldPassword" placeholder="请输入原密码" class="form-control">
+                                 </div>
+                             </div>
+                             <div class="row form-group">
+                                 <div class="col col-md-3">
+                                     <label for="password-input" class=" form-control-label">新密码</label>
+                                 </div>
+                                 <div class="col-12 col-md-9">
+                                     <input type="password" name="newPassword" placeholder="请输入新密码" class="form-control">
+                                     <small class="help-block form-text">密码只能输入6-20个字母、数字、下划线!</small>
+                                 </div>
+                             </div>
+                         </form>
+                     </div>
+                     <div class="card-footer">
+                         <button class="btn btn-primary btn-sm" onclick="submitUpdatePwdUser()">
+                             <i class="fa fa-dot-circle-o"></i> 提交
+                         </button>
+                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+                     </div>
+                 </div>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
-
+function updatePwd() {
+	$('#updatePwdModal').modal('show');
+}
+function submitUpdatePwdUser() {
+	let passwordPatrn = /^(\w){6,20}$/;  
+	let oldPwd = $("#updatePwdForm input[name='oldPassword']").val();
+	if (oldPwd == '') { alert("请输入原密码!"); return false; }
+	if (!passwordPatrn.exec(oldPwd)){ alert("原密码只能输入6-20个字母、数字、下划线!"); return false;}
+	let newPwd = $("#updatePwdForm input[name='newPassword']").val();
+	if (newPwd == '') { alert("请输入新密码!"); return false; }
+	if (!passwordPatrn.exec(newPwd)){ alert("新密码只能输入6-20个字母、数字、下划线!"); return false;}
+	$.ajax({
+		url : "/password",
+		type : 'POST',
+		data : {
+			password : oldPwd,
+			newPassword : newPwd
+		},
+		dataType : 'JSON',
+		success : function(result) {
+			if (result.code == 1) {
+				$('#updatePwdModal').modal('hide');
+				$('.modal-backdrop').remove();
+				setTimeout(() => {$(location).attr('href', 'logout');},300);
+			}else {
+				alert(result.msg);
+			}
+		}
+	});
+}
 </script>
