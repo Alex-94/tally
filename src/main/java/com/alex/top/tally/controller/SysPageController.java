@@ -1,18 +1,17 @@
 package com.alex.top.tally.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.alex.top.tally.entity.AlexUserEntity;
+import com.alex.top.tally.service.AlexUserService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.alex.top.tally.entity.AlexUserEntity;
-import com.alex.top.tally.service.AlexUserService;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 系统页面视图
@@ -46,6 +45,15 @@ public class SysPageController {
 		wrapper.orderDesc(desc);
 		model.addAttribute("users", alexUserService.selectList(wrapper));
 		return "user";
+	}
+
+	@RequestMapping("company.html")
+	public String company(Model model) {
+		AlexUserEntity currentUser = (AlexUserEntity) SecurityUtils.getSubject().getPrincipal();
+		if (null != currentUser) {
+			model.addAttribute("currentUser", currentUser);
+		}
+		return "company";
 	}
 
 }

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="au theme template">
+    <meta name="author" content="Hau Nguyen">
+    <meta name="keywords" content="au theme template">
+    <!-- Title Page-->
+    <title>小小账本-企业</title>
+	<#include "common_header_css.html"/>
+</head>
+<body class="animsition">
+    <div class="page-wrapper">
+		<#include "common_header_navbar.html"/>
+        <!-- PAGE CONTENT-->
+        <div class="page-content--bgf7">
+            <!-- DATA TABLE-->
+            <section class="p-t-20">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-data__tool">
+                                <div class="table-data__tool-left">
+                                </div>
+                                <div class="table-data__tool-right">
+                                    <button type="button" class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal" data-target="#addOrUpdateUserModal">
+											<i class="zmdi zmdi-plus"></i>添加
+									</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive table-responsive-data2">
+                                <table class="table table-data2">
+                                    <thead align="center">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>公司名称</th>
+                                            <th>联系方式</th>
+                                            <th>创建时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody align="center">
+                                    		<#if users?? && (users?size > 0)>
+                                    			<#list users as user>
+                                    				<tr class="tr-shadow">
+		                                            <td>${user.userName}</td>
+		                                            <td>${user.company!""}</td>
+		                                            <td><#if user.userType == 0>员工<#else>老板</#if></td>
+		                                            <td><span class="status--process"><#if user.userState == 0>未审核<#elseif user.userState == 1>审核通过<#else>未过审</#if></span></td>
+		                                            <td>${user.createTime?string("yyyy-MM-dd")}</td>
+		                                            <td>
+		                                                <div class="table-data-feature">
+		                                                		<#if user.userState == 1>
+			                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="重置密码" onclick="resetPwd('${user.id}')">
+			                                                        <i class="fa fa-rotate-right"></i>
+			                                                    </button>
+		                                                		</#if>
+		                                                    <#if user.userState == 0>
+			                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="审核" onclick="checkUser('${user.id}')">
+			                                                        <i class="zmdi zmdi-mail-send"></i>
+			                                                    </button>
+		                                                    </#if>
+		                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="删除" onclick="deleteUser('${user.id}')">
+		                                                        <i class="zmdi zmdi-delete"></i>
+		                                                    </button>
+		                                                </div>
+		                                            </td>
+		                                        </tr>
+		                                        <tr class="spacer"></tr>
+                                    			</#list>
+                                    		<#else>
+                                    			<tr class="tr-shadow">
+	                                            <td colspan="6" align="center">暂无数据</td>
+	                                        </tr>
+	                                        <tr class="spacer"></tr>
+                                    		</#if> 
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="modal fade" id="addOrUpdateUserModal" tabindex="-1" role="dialog" aria-labelledby="addOrUpdateUserModalLabel" aria-hidden="true" data-backdrop="static">
+								<div class="modal-dialog modal-lg" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="addOrUpdateUserModalLabel">用户信息</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											 <div class="card">
+			                                    <div class="card-body card-block">
+			                                        <form id="userForm" method="post" class="form-horizontal">
+			                                            <div class="row form-group">
+			                                                <div class="col col-md-3">
+			                                                    <label for="text-input" class="form-control-label">用户名</label>
+			                                                </div>
+			                                                <div class="col-12 col-md-9">
+			                                                    <input type="text" name="userName" placeholder="请输入用户名" class="form-control">
+			                                                    <small class="help-block form-text">用户名只能输入4到16位（字母，数字，下划线）!</small>
+			                                                </div>
+			                                            </div>
+			                                            <div class="row form-group">
+			                                                <div class="col col-md-3">
+			                                                    <label for="password-input" class=" form-control-label">密码</label>
+			                                                </div>
+			                                                <div class="col-12 col-md-9">
+			                                                    <input type="password" name="password" placeholder="请输入密码" class="form-control">
+			                                                    <small class="help-block form-text">密码只能输入6-20个字母、数字、下划线!</small>
+			                                                </div>
+			                                            </div>
+			                                            <div class="row form-group">
+			                                                <div class="col col-md-3">
+			                                                    <label class=" form-control-label">用户类型</label>
+			                                                </div>
+			                                                <div class="col col-md-9">
+			                                                    <div class="form-check-inline form-check">
+			                                                        <label for="userType0" class="form-check-label ">
+			                                                            <input type="radio" id="userType0" name="userType" checked value="0" class="form-check-input">员工
+			                                                        </label>
+			                                                        <label for="userType1" class="form-check-label ">
+			                                                            <input type="radio" id="userType1" name="userType" value="1" class="form-check-input">老板
+			                                                        </label>
+			                                                    </div>
+			                                                </div>
+			                                            </div>
+			                                        </form>
+			                                    </div>
+			                                    <div class="card-footer">
+			                                        <button class="btn btn-primary btn-sm" onclick="submitUser()">
+			                                            <i class="fa fa-dot-circle-o"></i> 提交
+			                                        </button>
+			                                        <button class="btn btn-danger btn-sm" onclick="resetUserInfo()">
+			                                            <i class="fa fa-ban"></i> 重置
+			                                        </button>
+			                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+			                                    </div>
+			                                </div>
+										</div>
+									</div>
+								</div>
+							</div>
+                            <div class="modal fade" id="checkUserModal" tabindex="-1" role="dialog" aria-labelledby="checkUserModalLabel" aria-hidden="true" data-backdrop="static">
+								<div class="modal-dialog modal-lg" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="checkUserModalLabel">用户审核</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											 <div class="card">
+			                                    <div class="card-body card-block">
+			                                        <form id="checkUserForm" method="post" class="form-horizontal">
+			                                        		<input type="hidden" name="userId" value="">
+			                                            <div class="row form-group">
+			                                                <div class="col col-md-3">
+			                                                    <label class=" form-control-label">审核选项</label>
+			                                                </div>
+			                                                <div class="col col-md-9">
+			                                                    <div class="form-check-inline form-check">
+			                                                        <label for="userState1" class="form-check-label ">
+			                                                            <input type="radio" id="userState1" name="userState" checked value="1" class="form-check-input">通过
+			                                                        </label>
+			                                                        <label for="userState2" class="form-check-label ">
+			                                                            <input type="radio" id="userState2" name="userState" value="2" class="form-check-input">不通过
+			                                                        </label>
+			                                                    </div>
+			                                                </div>
+			                                            </div>
+			                                        </form>
+			                                    </div>
+			                                    <div class="card-footer">
+			                                        <button class="btn btn-primary btn-sm" onclick="submitCheckUser()">
+			                                            <i class="fa fa-dot-circle-o"></i> 提交
+			                                        </button>
+			                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+			                                    </div>
+			                                </div>
+										</div>
+									</div>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END DATA TABLE-->
+        </div>
+    </div>
+    <#include "common_header_js.html"/>
+    <script src="${request.contextPath}/statics/js/user.js"></script>
+</body>
+</html>
+<!-- end document-->
